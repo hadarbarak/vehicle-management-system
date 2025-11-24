@@ -1,0 +1,14 @@
+[
+  {
+    "license_plate": "12-345-67",
+    "status": "Available"
+  },
+  {
+    "license_plate": "89-111-22",
+    "status": "InUse"
+  },
+  {
+    "license_plate": "77-222-33",
+    "status": "Maintenance"
+  }
+]

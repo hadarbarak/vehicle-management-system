@@ -1,0 +1,53 @@
+### Updated list (always run first to verify the IDs
+GET http://localhost:4000/vehicles
+
+### Forbidden delete (id=2 is InUse) → expected 422 DELETE_FORBIDDEN
+DELETE http://localhost:4000/vehicles/2
+
+### Allowed delete (id=4 is Available) → expected 200
+DELETE http://localhost:4000/vehicles/4
+
+### Valid status change (id=3 from InUse → Available) → expected 200
+PATCH http://localhost:4000/vehicles/3/status
+Content-Type: application/json
+
+{
+  "status": "Available"
+}
+
+### Invalid status change (Changing id=3 from Available → InUse is actually valid, so to test a forbidden transition we will use Maintenance → InUse)
+# Try changing it to Maintenance first — you may get 422 MAINT_CAP (5%) because the total number of vehicles is small. This is normal. 
+PATCH http://localhost:4000/vehicles/3/status
+Content-Type: application/json
+
+{
+  "status": "Maintenance"
+}
+
+### If the change to Maintenance succeeded, now test the forbidden transition:
+Maintenance → InUse → expected 422 ILLEGAL_TRANSITION 
+PATCH http://localhost:4000/vehicles/3/status
+Content-Type: application/json
+
+{
+  "status": "InUse"
+}
+
+### Creating a vehicle with a duplicate license plate (55-666-77 which already exists)
+→ expected 422 PLATE_EXISTS
+POST http://localhost:4000/vehicles
+Content-Type: application/json
+
+{
+  "license_plate": "55-666-77",
+  "status": "Available"
+}
+
+### 6) Another valid vehicle creation (for testing)
+POST http://localhost:4000/vehicles
+Content-Type: application/json
+
+{
+  "license_plate": "10-200-30",
+  "status": "Available"
+}
