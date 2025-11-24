@@ -131,3 +131,10 @@ project-root/
         cd backend
         npm test
 ```
+```
+
+### UI Screenshot
+
+![Vehicle Management UI](ui-screenshot.png)
+
+```
